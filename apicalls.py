@@ -33,12 +33,12 @@ def twitget(comp, count = 10):
 
     }
     search_resp = requests.get(search_url, headers=search_headers, params=search_params)
-    return search_resp
+    return search_resp.json()
 
 
 
 
-def watsget(txt):
+def watsget(comp,txt):
     natural_language_understanding = NaturalLanguageUnderstandingV1(
       username=watson_username,
       password=watson_password,
@@ -47,7 +47,7 @@ def watsget(txt):
       text=txt,
       features=Features(
       # Emotion options
-      emotion=EmotionOptions([company[0]])
+      emotion=EmotionOptions(comp)
       )
     )
     return response
