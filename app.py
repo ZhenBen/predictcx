@@ -1,5 +1,6 @@
-import * from apicalls
-from flask import Flask, render_template
+from apicalls import *
+from predict import *
+from flask import Flask, render_template, request
 app = Flask(__name__)
 
 
@@ -35,8 +36,12 @@ def analyze(comp, count = 10):
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    prediction = ['hi']
     if request.method == "POST":
-        company = request.form('company')
+        company = request.form['company']
+        prediction = ['worked']
+        # results = analyze(company)
+        # prediction = predict_change(results)
     return render_template('index.html')
 
 if __name__ == "__main__":
