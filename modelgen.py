@@ -8,7 +8,7 @@ import numpy
 import pandas as pd
 from pandas.tseries.offsets import BDay
 from sklearn.neural_network import MLPClassifier
-
+from watson_developer_cloud import NaturalLanguageUnderstandingV1
 from watson_developer_cloud.natural_language_understanding_v1 import Features, EmotionOptions
 import pickle
 
@@ -17,11 +17,11 @@ companies = [["Microsoft", "MSFT"], ["Apple","AAPL"],["Google", "GOOGL"],
             ["Netflix","NFLX"],["Tesla","TSLA"],["Disney","DIS"]]
 
 #AUTHORIZATION
-key_secret = '{}:{}'.format(consumer_key, consumer_secret).encode('ascii')
+key_secret = '{}:{}'.format(twitter_consumer_key, twitter_consumer_secret).encode('ascii')
 b64_encoded_key = base64.b64encode(key_secret)
 b64_encoded_key = b64_encoded_key.decode('ascii')
 
-base_url = 'https://api.twitter.com/'
+base_url = twitter_url
 auth_url = '{}oauth2/token'.format(base_url)
 search_url = '{}1.1/search/tweets.json'.format(base_url)
 
@@ -36,12 +36,11 @@ search_headers = {
     'Authorization': 'Bearer {}'.format(access_token)
 }
 
-#STOCKINFO
-
-stockurl = 'https://www.alphavantage.co/query'
-
 #IBM INFO
-
+natural_language_understanding = NaturalLanguageUnderstandingV1(
+  username=watson_username,
+  password=watson_password,
+  version=watson_version)
 
 
 company_scores={}
@@ -91,9 +90,9 @@ for company in companies:
     stock_params = {
         'function':'TIME_SERIES_DAILY',
         'symbol': company[1],
-        'apikey': stockapikey
+        'apikey': stock_api_key
     }
-    response = requests.get(stockurl, params=stock_params)
+    response = requests.get(stock_url, params=stock_params)
     today = pd.datetime.today()
     if ((today - BDay(0)) == today):
         last_business = today
@@ -125,10 +124,6 @@ print(X)
 print(y)
 mlp.fit(X,y)
 
-result=mlp.predict([[0.40341499999999997, 0.15103650000000002,0.11095250000000001,0.35919999999999996,0.1449995]])
-
-print(result)
-
 model_file = 'percent_change.sav'
 pickle.dump(mlp, open(model_file, 'wb'))
 
@@ -141,9 +136,6 @@ for i in y:
 
 mlp2 = MLPClassifier(hidden_layer_sizes=(10,10,10))
 mlp2.fit(X,y2)
-result=mlp2.predict([[0.40341499999999997, 0.15103650000000002,0.11095250000000001,0.35919999999999996,0.1449995]])
-
-print(result)
 
 model_file = 'change.sav'
 pickle.dump(mlp2, open(model_file, 'wb'))

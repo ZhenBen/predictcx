@@ -1,0 +1,13 @@
+# Twitter Keys
+twitter_url = 'https://api.twitter.com/'
+twitter_consumer_key = 'Twitter Consumer Key'
+twitter_consumer_secret = 'Twitter Consumer Secret'
+
+# Stock Api Keys
+stock_url = 'https://www.alphavantage.co/query'
+stockapikey='Alphavantage Api Key'
+
+# Watson Keys
+watson_username = "Watson Developer Cloud Key"
+watson_password = "Watson Developer Cloud Password"
+watson_version = "Watson Developer Cloud Version"
