@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 
 def analyze(comp, count = 10):
-    company_scores[comp]={
+    company_scores={
         'sadness': 0,
         'disgust': 0,
         'anger': 0,
@@ -19,16 +19,16 @@ def analyze(comp, count = 10):
         result = watsget(comp,tweet['full_text'])
         score.append(result['emotion']['document']['emotion'])
     for s in score:
-        company_scores[comp]['sadness'] += (s['sadness'] / count)
-        company_scores[comp]['disgust'] += (s['disgust'] / count)
-        company_scores[comp]['anger'] += (s['anger'] / count)
-        company_scores[comp]['joy'] += (s['joy'] / count)
-        company_scores[comp]['fear'] += (s['fear'] / count)
-    return [ company_scores[comp]['sadness'],
-             company_scores[comp]['disgust'],
-             company_scores[comp]['anger'],
-             company_scores[comp]['joy'],
-             company_scores[comp]['fear']]
+        company_scores['sadness'] += (s['sadness'] / count)
+        company_scores['disgust'] += (s['disgust'] / count)
+        company_scores['anger'] += (s['anger'] / count)
+        company_scores['joy'] += (s['joy'] / count)
+        company_scores['fear'] += (s['fear'] / count)
+    return [ company_scores['sadness'],
+             company_scores['disgust'],
+             company_scores['anger'],
+             company_scores['joy'],
+             company_scores['fear']]
 
 
 
@@ -36,13 +36,12 @@ def analyze(comp, count = 10):
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    prediction = ['hi']
+    prediction = ['']
     if request.method == "POST":
         company = request.form['company']
-        prediction = ['worked']
-        # results = analyze(company)
-        # prediction = predict_change(results)
-    return render_template('index.html')
+        results = analyze(company)
+        prediction = predict_change(results)
+    return render_template('index.html', prediction=prediction)
 
 if __name__ == "__main__":
     app.run()

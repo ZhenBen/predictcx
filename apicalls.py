@@ -25,7 +25,7 @@ def twitget(comp, count = 10):
         'Authorization': 'Bearer {}'.format(access_token)
     }
     search_params = {
-        'q': company[0],
+        'q': comp,
         'result_type': 'mixed',
         'count': count,
         'lang': 'en',
